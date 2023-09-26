@@ -1,6 +1,9 @@
 # comp0127_lab
 Collection of packages for lab sessions in COMP0127 Robotic Systems Engineering.
 
+## Installation Instructions:
+https://liveuclac-my.sharepoint.com/:b:/g/personal/ucabkdo_ucl_ac_uk/EWt6vYuADftImZkMphNJnL8BxgSDYuhTeKM6BsSFMaJZPA?e=rz367f
+
 
 ## Ubuntu 20.04 and ROS 1 Noetic Setup
 
