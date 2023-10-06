@@ -1,11 +1,12 @@
 # comp0127_lab
 Collection of packages for lab sessions in COMP0127 Robotic Systems Engineering.
 
-## Installation Instructions:
-https://liveuclac-my.sharepoint.com/:b:/g/personal/ucabkdo_ucl_ac_uk/EWt6vYuADftImZkMphNJnL8BxgSDYuhTeKM6BsSFMaJZPA?e=rz367f
-
+## Lab Manuals
+The markdown (.md) versions of the .pdf lab manuals available on moodle are located in the [lab_manuals](https://github.com/surgical-vision/comp0127_lab/tree/master/lab_manuals) folder.
 
 ## Ubuntu 20.04 and ROS 1 Noetic Setup
+
+A pdf describing setup instructions for Ubuntu 20.04 and ROS noetic can be found on moodle.
 
 Note:
 This course is designed using **ROS 1 noetic** (a.k.a. ROS noetic) in a **Ubuntu 20.04** environment.
