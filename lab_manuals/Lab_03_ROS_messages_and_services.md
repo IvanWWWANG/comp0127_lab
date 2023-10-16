@@ -36,9 +36,9 @@ what field types are used.
 
 # **Message Example**
 
-In the same way as we did last time, let`s make a new `lab03` folder
+In the same way as we did last time, let's make a new `lab03` folder
 inside our `comp0127_lab` directory, and inside the `lab03` folder,
-let`s create a new package called `lab03_example`:
+let's create a new package called `lab03_example`:
 
 ```
 cd ~/catkin_ws/src/comp0127_lab
@@ -178,7 +178,7 @@ publisher sends 3 random floats corresponding to the Rodrigues angles of
 a random rotation and the subscribers receives and transforms them into
 a rotation matrix (that will be printed).
 
-First, let`s create a new package `lab03_example_msg`:
+First, let's create a new package `lab03_example_msg`:
 ```
 cd ~/catkin_ws/src/comp0127_lab/lab03
 catkin_create_pkg lab03_example_msg rospy std_msgs
@@ -269,7 +269,7 @@ point. For this reason, we will include `geometry_msgs` along with
 useful messages such as points and quaternions that will be widely used
 during the course.
 
-Let`s create a new package `lab03_example_srv` inside our
+let's create a new package `lab03_example_srv` inside our
 comp0127_lab/lab03 directory:
 
 ```
@@ -277,7 +277,7 @@ cd ~/catkin_ws/src/comp0127_lab/lab03
 catkin_create_pkg lab03_example_srv rospy std_msgs geometry_msgs
 ```
 
-Then let`s create our srv folder with a `point_rot.srv` file inside
+Then let's create our srv folder with a `point_rot.srv` file inside
 containing the following:
 
 ```
