@@ -22,7 +22,7 @@ In a Ubuntu 20.04 environment, install ROS noetic by following the installation 
 http://wiki.ros.org/noetic/Installation/Ubuntu
 
 
-## com0127_lab Dependencies
+## comp0127_lab Dependencies
 
 Once ROS noetic is installed, run the following code in a Ubuntu command terminal:
 ```
@@ -34,6 +34,10 @@ References:
 - manipulator_h_description: 'https://github.com/ROBOTIS-GIT/ROBOTIS-MANIPULATOR-H'
 - open_manipulator_description: 'https://github.com/ROBOTIS-GIT/open_manipulator'
 
+
+## Debugging
+
+This section provides comprehensive information on debugging your workspace, addressing any issues that may have arisen during the lab, and reviewing reported errors and problems.
 
 ### Issue 1: "usr/bin/env: ‘python3\r’: No such file or directory"
 
