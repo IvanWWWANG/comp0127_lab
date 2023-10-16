@@ -34,3 +34,19 @@ References:
 - manipulator_h_description: 'https://github.com/ROBOTIS-GIT/ROBOTIS-MANIPULATOR-H'
 - open_manipulator_description: 'https://github.com/ROBOTIS-GIT/open_manipulator'
 
+
+### Issue 1: "usr/bin/env: ‘python3\r’: No such file or directory"
+
+**Problem:** You encounter the error message `/usr/bin/env: ‘python3\r’: No such file or directory`.
+
+**Solution:** To resolve this issue, follow these steps:
+
+1. Open your terminal.
+
+2. Run the following command to install the `dos2unix` utility:
+
+   ```bash
+   sudo apt install dos2unix
+   ```
+
+More info on the issue can be found [here](https://askubuntu.com/questions/896860/usr-bin-env-python3-r-no-such-file-or-directory).
