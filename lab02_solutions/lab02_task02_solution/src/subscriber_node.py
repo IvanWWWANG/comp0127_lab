@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 import random
 ##TODO: include the library for a msg typed VectorStamped
@@ -12,14 +12,11 @@ def callback(msg, offsets):
     z_new = msg.vector.z + offsets[1];
 
     ##TODO: Print the updated coordinates.
-    print
-    'The current point is '
-    print
-    str(x_new)
-    print
-    str(msg.vector.y)
-    print
-    str(z_new)
+    print('The current point is ')
+    print(str(x_new))
+    print(str(msg.vector.y))
+    print(str(z_new))
+    
 
 
 def listener():

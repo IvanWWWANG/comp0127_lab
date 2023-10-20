@@ -2,8 +2,8 @@
 <launch>
 
     <!-- Run publisher_node -->
-    <node name="publisher_node" pkg="lab02_task02" type="publisher_node.py"/>
+    <node name="publisher_node" pkg="lab02_task02_solution" type="publisher_node.py"/>
     <!-- Run subscriber_node -->
-    <node name="subscriber_node" pkg="lab02_task02" type="subscriber_node.py" output="screen"/>
+    <node name="subscriber_node" pkg="lab02_task02_solution" type="subscriber_node.py" output="screen"/>
 
 </launch>
