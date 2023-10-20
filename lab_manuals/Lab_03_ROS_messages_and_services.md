@@ -64,27 +64,29 @@ add more file types, always one per line.
 Now that we have created our message, we need to turn it into source
 code for Python etc.
 
-In the `package.xml` file of the package, add the following lines.
+In the `package.xml` file of the package, add the following lines:
 
 ```
-cd ~/catkin_ws/src/comp0127/lab03/lab03_example
-mkdir msg
-echo int64 num > msg/Num.msg
+<build_depend>message_generation</build_depend>
+<exec_depend>message_runtime</exec_depend>
 ```
 
 And in the `CMakeLists.txt` file of the package, add the
 `message_generation` line into your **existing** `find_package` text
 field:
+
 ```
-cd ~/catkin_ws/src/comp0127/lab03/lab03_example
-mkdir msg
-echo int64 num > msg/Num.msg
+find_package(catkin REQUIRED COMPONENTS rospy std_msgs message_generation)
 ```
 
 Also, in the same file add `CATKIN_DEPENS message_runtime` in the
 **existing** `catkin_package` text field:
+```
+catkin_package(CATKIN_DEPENDS message_runtime)
+```
 
 Next, add the following block of code into the file:
+
 ```
 add_message_files(FILES  Num.msg)
 ```
@@ -201,7 +203,33 @@ scripts:
 
 Publisher (lab03_example01_pub.py):
 
-<img src="lab_md_media/lab03_media/Image1.png" alt="image" width="80%" height="auto">
+```
+import rospy
+import random
+from lab03_example_msg.msg import test_msg
+
+def rot_publisher():
+    pub = rospy.Publisher('publish_rotation', test_msg, queue_size=100)
+    rospy.init_node('rotation_publisher', anonymous=True)
+    rate = rospy.Rate(10) # 10hz
+
+    rot_msg = test_msg()
+
+    while not rospy.is_shutdown():
+        rot_msg.rotx.data = random.uniform(-2.0, 2.0)
+        rot_msg.roty.data = random.uniform(-1.0, 1.0)
+        rot_msg.rotz.data = random.uniform(-2.5, 2.5)
+
+
+        pub.publish(rot_msg)
+        rate.sleep()
+
+if __name__ == '__main__':
+    try:
+        rot_publisher()
+    except rospy.ROSInterruptException:
+        pass
+```
 
 These two scripts are very similar to the ones we encountered in the
 previous lab, however here we are not using a std_msg but a custom one.
@@ -222,7 +250,48 @@ In order to use custom messages in our publisher we have to:
 
 Subscriber (lab03_example01_sub.py):
 
-<img src="lab_md_media/lab03_media/Image2.png" alt="image" width="100%" height="auto">
+```
+#!/usr/bin/env python3
+import rospy
+import numpy as np
+import math
+# Include the library for a msg for an integer
+from lab03_example_msg.msg import test_msg
+
+# Define a callback function to print out the incoming message.
+def subscriberCallback(msg):
+    I = np.identity(3)
+    theta = np.sqrt(np.power(msg.rotx.data, 2) + np.power(msg.roty.data, 2) + np.power(msg.rotz.data, 2))
+
+    omega_x = msg.rotx.data/theta
+    omega_y = msg.roty.data/theta
+    omega_z = msg.rotz.data/theta
+
+    K = np.zeros([3, 3])
+    K[0, 1] = -omega_z
+    K[0, 2] = omega_y
+    K[1, 0] = omega_z
+    K[1, 2] = -omega_x
+    K[2, 0] = -omega_y
+    K[2, 1] = omega_x
+
+    R = I + math.sin(theta)*K + (1 - math.cos(theta) * (K.dot(K)))
+    print(R)
+
+def rot_converter():
+    rospy.init_node('rotation_subscriber', anonymous=True)
+    rospy.Subscriber("publish_rotation", test_msg, subscriberCallback)
+    rospy.spin()
+    rospy.sleep()
+
+
+if __name__ == '__main__':
+    try:
+        rot_converter()
+    except rospy.ROSInterruptException:
+        pass
+
+```
 
 In the subscriber, we can easily access the message content by referring
 to the variable`s name.
@@ -287,14 +356,78 @@ geometry_msgs/Point p
 geometry_msgs/Point out_p
 ```
 
-Save, exit and repeat the steps to modify the package.xml and
-CMakeLists.txt files.
+Save, exit and repeat the steps to modify the `package.xml` and `CMakeLists.txt` files. Note that this time we are using `geometry_msgs`, not `std_msgs` in `point_rot.srv`, so when modfiying the `CMakeLists.txt` file, ensure that `geometry_msgs` is included as a dependency for `generate_messages`:
+
+```
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs
+)
+```
 
 Now we will fill the `src` folder with our `client.py` and `server.py`.
 
 Starting from the service node:
+```
+#!/usr/bin/env python3
 
-<img src="lab_md_media/lab03_media/Image3.png" alt="image" width="100%" height="auto">
+import rospy
+import numpy as np
+
+from lab03_example_srv.srv import point_rot, point_rotResponse
+
+def handle_point_rotation(req):
+    
+    p_x = req.p.x
+    p_y = req.p.y
+    p_z = req.p.z
+
+    p = np.array([p_x, p_y, p_z]).reshape(3,1)
+
+    q_x = req.q.x
+    q_y = req.q.y
+    q_z = req.q.z
+    q_w = req.q.w
+
+    R = np.zeros((3,3))
+
+    q_xx = q_x*q_x
+    q_yy = q_y*q_y
+    q_zz = q_z*q_z
+
+    R[0,0] = 1 - 2*q_yy - 2*q_zz
+    R[1,1] = 1 - 2*q_xx - 2*q_zz
+    R[2,2] = 1 - 2*q_xx - 2*q_yy
+
+    R[0,1] = (2*q_x*q_y) - (2*q_z*q_w)
+    R[0,2] = (2*q_x*q_z) - (2*q_y*q_w)
+
+    R[1,0] = (2*q_x*q_y) - (2*q_z*q_w)
+    R[1,2] = (2*q_y*q_z) - (2*q_x*q_w)
+
+    R[2,0] = (2*q_x*q_z) - (2*q_y*q_w)
+    R[2,1] = (2*q_y*q_z) - (2*q_x*q_w)
+
+
+    result = R@p # 3x3 * 3x1 = 3x1
+
+    response = point_rotResponse()
+
+    response.out_p.x = result[0]
+    response.out_p.y = result[1]
+    response.out_p.z = result[2]
+
+    return response
+
+
+def rotate_point_service():
+    rospy.init_node('rotate_point', anonymous=True)
+    rospy.Service('rotate_pt', point_rot, handle_point_rotation)
+    rospy.spin()
+
+if __name__ == '__main__':
+    rotate_point_service()
+```
 
 -   First, import the srv file from the specified folder. You can see
     that we import two elements: point_rot and point_rotResponse. The
@@ -317,9 +450,50 @@ Starting from the service node:
     point_rotResponse is effectively a message and you can create and
     access it as we showed previously.
 
-<img src="lab_md_media/lab03_media/Image4.png" alt="image" width="80%" height="auto">
-
 Moving to the client:
+
+```
+#!/usr/bin/env python3
+
+import rospy
+import numpy as np
+import random
+import time
+
+from lab03_example_srv.srv import point_rot, point_rotRequest
+
+def point_rotation_client():
+    
+    rospy.wait_for_service('rotate_pt')
+    client = rospy.ServiceProxy('rotate_pt', point_rot)
+    req = point_rotRequest()
+
+    while not rospy.is_shutdown():
+
+        req.p.x = random.uniform(-2.0, 2.0)
+        req.p.y = random.uniform(-2.1, 2.3)
+        req.p.z = random.uniform(-1.0, 1.0)
+
+        quaternion = np.random.rand(4)
+        quaternion /= np.linalg.norm(quaternion)
+
+        req.q.x = quaternion[0]
+        req.q.y = quaternion[1]
+        req.q.z = quaternion[2]
+        req.q.w = quaternion[3]
+
+        res = client(req)
+
+        print(res)
+        time.sleep(3)
+
+
+if __name__ == '__main__':
+    try:
+        point_rotation_client()
+    except rospy.ROSInterruptException:
+        pass
+```
 
 -   First, import the srv file from the specified folder. Here we import
     two elements again: point_rot and point_rotRequest. The first one
