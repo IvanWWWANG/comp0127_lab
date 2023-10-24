@@ -27,7 +27,11 @@ user transform points, vectors, etc., between any two coordinate frames
 at any desired point in time. In a few words, ```tf``` is a library for
 keeping track of coordinate frames.
 
-<img src="lab_md_media/lab04_media/image1.png" alt="image" width="100%" height="auto">
+<p float="left">
+  <img src="lab_md_media/lab04_media/image2.png" alt="image" width="35%" height="auto">
+  <img src="lab_md_media/lab04_media/image1.png" alt="image" width="50%" height="auto">
+</p>
+
 
 The ```tf``` library is most closely related to the concept of a scene graph
 (a common type of data structure used to represent a 3D scene for rendering)
@@ -112,8 +116,10 @@ you to publish the state of a robot to tf. It takes the joint angles
 of the robot as input, and publishes the 3D poses of the robot links
 using a kinematic tree robot model.
 
-<img src="lab_md_media/lab04_media/image3.png" alt="image" width="50%" height="auto">
-<img src="lab_md_media/lab04_media/image4.png" alt="image" width="50%" height="auto">
+<p float="left">
+  <img src="lab_md_media/lab04_media/image3.png" alt="image" width="45%" height="auto">
+  <img src="lab_md_media/lab04_media/image4.png" alt="image" width="45%" height="auto">
+</p>
 
 In this example, rather than using the pre-defined frames, we will
 define our own frame and broadcast it over tf2, to appear in rviz.
@@ -122,7 +128,7 @@ Let’s take a look into the code.
 
 The very first task we have to do is import our dependencies.
 
-<img src="lab_md_media/lab04_media/image5.png" alt="image" width="100%" height="auto">
+<img src="lab_md_media/lab04_media/image5.png" alt="image" width="60%" height="auto">
 
 With the launchfile we invoke the ```joint_state_publisher_gui``` node, a
 package used for controlling the joint angles of the simulated robot. We
@@ -133,7 +139,7 @@ are published, we can use standard rostopic commands. By running
 ```joint_states```, and by further looking into the topic, we see that the
 corresponding message type is ```sensor_msgs/JointState```.
 
-<img src="lab_md_media/lab04_media/image6.png" alt="image" width="100%" height="auto">
+<img src="lab_md_media/lab04_media/image6.png" alt="image" width="80%" height="auto">
 
 Next, we import the TransformBroadcaster, the tf2 class that publishes
 the coordinate frame transformation information to tf2, and finally the
@@ -147,7 +153,7 @@ previous lab session, we need to define the name for our frames. In this
 example we are publishing a single frame, and thus our ```name_link``` array
 will only contain frame 1 from the presentation.
 
-<img src="lab_md_media/lab04_media/image7.png" alt="image" width="100%" height="auto">
+<img src="lab_md_media/lab04_media/image7.png" alt="image" width="70%" height="auto">
 
 The following function is the forward kinematics function. Ideally, our
 forward kinematics function should solve the forward kinematics by
@@ -167,7 +173,7 @@ wrong**.
 
 We then move into our main function:
 
-<img src="lab_md_media/lab04_media/image8.png" alt="image" width="100%" height="auto">
+<img src="lab_md_media/lab04_media/image8.png" alt="image" width="70%" height="auto">
 
 We initialise our TransformBroadcaster that will be broadcasting our
 transforms to tf2. If we wanted to broadcast a static frame that never
@@ -198,6 +204,7 @@ If we run our launch file again, we should be able to see our
 ```fkine_link_1``` frame in rviz, and by moving ```joint1```, we should see our
 user-defined frame move accordingly.
 
-<img src="lab_md_media/lab04_media/image10.png" alt="image" width="50%" height="auto">
-<img src="lab_md_media/lab04_media/image11.png" alt="image" width="50%" height="auto">
-
+<p float="left">
+  <img src="lab_md_media/lab04_media/image10.png" alt="image" width="45%" height="auto">
+  <img src="lab_md_media/lab04_media/image11.png" alt="image" width="45%" height="auto">
+</p>
