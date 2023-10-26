@@ -79,7 +79,7 @@ def rotmat2q(T):
 
 def fkine_wrapper(joint_msg, br):
     # TODO: Fill in this callback function
-    transform = TransformStamped()
+    
 
     # This loop should iterate through all joints. In this simplified example, we are only using joint frame 1.
     for i in range(1):
