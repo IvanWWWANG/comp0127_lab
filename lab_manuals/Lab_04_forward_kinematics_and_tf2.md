@@ -92,7 +92,7 @@ the user keep track of multiple coordinate frames over time.
 
 ```evince frames.pdf```  - draws a tree of how the frames that are being broadcast over ROS are being broadcast over ROS are connected
 
-```rosrun rqt_tf_tree```  - a runtime tool for visualizing the tree of frames being broadcast over ROS
+```rosrun rqt_tf_tree rqt_tf_tree```  - a runtime tool for visualizing the tree of frames being broadcast over ROS
 
 ```rosrun tf tf_echo <reference_frame> <target_frame>```  - reports the transform between any two frames broadcast over ROS
 
