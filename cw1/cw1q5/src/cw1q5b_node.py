@@ -39,33 +39,36 @@ youbot_dh_parameters = {'a':[, , , , ],
                         'theta' : [, , , , ]}
 
 
-# Function for rotation matrix to quaternion conversion
-def rotmat2q(T):
+def rotmat2q(R):
+# Function for converting a 3x3 Rotation matrix R to quaternion conversion q
     q = Quaternion()
-    tr = np.trace(T)
-    if tr == 4:
-        q.w = 1.0
-        q.x = 0.0
-        q.y = 0.0
-        q.z = 0.0
-        return q
-    angle = np.arccos((T[0, 0] + T[1, 1] + T[2, 2] - 1)/2)
-    xr = T[2, 1] - T[1, 2]
-    yr = T[0, 2] - T[2, 0]
-    zr = T[1, 0] - T[0, 1]
-    x = xr/np.sqrt(np.power(xr, 2) + np.power(yr, 2) + np.power(zr, 2))
-    y = yr/np.sqrt(np.power(xr, 2) + np.power(yr, 2) + np.power(zr, 2))
-    z = zr/np.sqrt(np.power(xr, 2) + np.power(yr, 2) + np.power(zr, 2))
-    q.w = np.cos(angle/2)
-    q.x = x * np.sin(angle/2)
-    q.y = y * np.sin(angle/2)
-    q.z = z * np.sin(angle/2)
+
+    angle = np.arccos((R[0, 0] + R[1, 1] + R[2, 2] - 1)/2)
+
+    if (angle == 0):
+        q.w = 1
+        q.x = 0
+        q.y = 0
+        q.z = 0
+
+    else:
+        xr = R[2, 1] - R[1, 2]
+        yr = R[0, 2] - R[2, 0]
+        zr = R[1, 0] - R[0, 1]
+
+        x = xr/np.sqrt(np.power(xr, 2) + np.power(yr, 2) + np.power(zr, 2))
+        y = yr/np.sqrt(np.power(xr, 2) + np.power(yr, 2) + np.power(zr, 2))
+        z = zr/np.sqrt(np.power(xr, 2) + np.power(yr, 2) + np.power(zr, 2))
+
+        q.w = np.cos(angle/2)
+        q.x = x * np.sin(angle/2)
+        q.y = y * np.sin(angle/2)
+        q.z = z * np.sin(angle/2)
+
     return q
 
-
-
 def standard_dh(a, alpha, d, theta):
-    # TODO complete the function
+    # TODO: complete the function
 
     """This function computes the homogeneous 4x4 transformation matrix T_i based 
     on the four standard DH parameters associated with link i and joint i.
@@ -127,7 +130,7 @@ def forward_kinematics(dh_dict, joints_readings, up_to_joint=5):
     return T
 
 def fkine_wrapper(joint_msg, br):
-    # TODO complete the function
+    # TODO: complete the function
     """This function integrates your robotics code with ROS and is responsible 
         to listen to the topic where joint states are published. Based on this,
         compute forward kinematics and publish it.
